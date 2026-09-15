@@ -2,8 +2,6 @@
 
 带**四维细粒度权限鉴权**的 RAG 知识库系统：文档多源维护 → 权限管控 → AI 鉴权检索问答 → 数据运营沉淀，全链路覆盖。
 
-![home](docs/screenshots/home.png)
-
 **测试账号**（首次 `seed` 初始化后可用）：
 
 | 账号 | 密码 | 角色 | 权限特点 |
@@ -22,24 +20,12 @@
 - 用户问到无权访问的内容时，通过无权限探测检索确认"内容存在但受限"，明确提示无权限查看（不泄露文档名与内容）
 - 权限更新时**数据库与 Milvus 标量字段双写同步**，立即生效
 
-研发部员工询问仅 HR 部/管理层可见的《高管薪酬与股权激励细则》时：
-
-![permission-blocked](docs/screenshots/permission-blocked.png)
-
 ### 2. AI 鉴权问答（SSE 流式）
 - RAG 链路：FAQ 缓存命中 → 向量检索 → 权限过滤 → Prompt 编排 → LLM 流式生成 → 后处理约束
 - **引用溯源**：每个关键结论标注来源片段 `[片段N]`，前端可查引用清单
-
-  ![qa-citation](docs/screenshots/qa-citation.png)
-
 - **幻觉约束**：系统指令强制"仅依据检索资料回答，数字条款原文引用"，多版本冲突时分别列出版本与适用时间
 - **实体反问**：问题命中的主体有歧义时（如"显示器的俯仰功能"命中多份文档），先反问确认再回答，避免答错文档
-
-  ![clarification](docs/screenshots/clarification.png)
-
 - **澄清功能**：无关问题（天气/闲聊/写诗等）**先回答再澄清**——分数门控（top score ≥ 0.70 直接走 RAG）+ LLM 意图分类混合判定，避免误伤低分的真实业务问题
-
-  ![off-topic](docs/screenshots/off-topic.png)
 
 ### 3. FAQ 缓存（Redis + 权限复核）
 高频问题答案缓存到 Redis，命中时先对**全部来源文档做权限复核**，无权则降级走完整检索链路，缓存与安全两不误。
@@ -49,21 +35,11 @@
 
 ### 5. FAQ 沉淀与数据运营看板
 - **FAQ 沉淀**：从问答记录与知识缺口中点选候选问题，AI 自动生成回答，一键写入缓存
-
-  ![faq-generation](docs/screenshots/faq-generation.png)
-
 - **运营看板**：8 张指标卡（问答量 / 用户数 / 知识覆盖率 / 满意度 / 平均响应 / Token 消耗 / 文档数 / 缺口数）+ 30 天趋势图 + 问题分类分布 + 文档热度 TOP10 + **权限拦截分析** + 满意度趋势（ECharts）
-
-  ![dashboard](docs/screenshots/dashboard.png)
 
 ### 6. 组织架构与知识维护
 - 用户 / 部门 / 角色三 Tab 管理，角色决定文档可见范围
-
-  ![organization](docs/screenshots/organization.png)
-
 - 知识文档支持 PDF / DOCX / MD / TXT 上传导入（异步任务 + 进度条 + SHA256 去重）、启用禁用、四维权限配置
-
-  ![knowledge-management](docs/screenshots/knowledge-management.png)
 
 ---
 
@@ -246,3 +222,43 @@ bash deploy.sh 6006     # AutoDL（6006 映射端口）
 | `RELEVANCE_GATE` | 澄清功能分数门控阈值（默认 0.70） |
 | `REDIS_URL` | Redis 地址（未启动时自动降级，跳过 FAQ 缓存） |
 | `DEBUG` | true = SQLite；false = PostgreSQL |
+
+---
+
+## 界面截图
+
+### AI 智能问答（首页）
+
+![home](docs/screenshots/home.png)
+
+### 权限拦截：无权访问的内容明确提示
+
+![permission-blocked](docs/screenshots/permission-blocked.png)
+
+### 引用溯源：关键结论标注来源片段
+
+![qa-citation](docs/screenshots/qa-citation.png)
+
+### 实体反问：主体歧义时先确认再回答
+
+![clarification](docs/screenshots/clarification.png)
+
+### 边界处理：无关问题先回答再澄清
+
+![off-topic](docs/screenshots/off-topic.png)
+
+### 知识维护：文档列表与四维权限标签
+
+![knowledge-management](docs/screenshots/knowledge-management.png)
+
+### FAQ 沉淀：候选问题点选 + AI 生成回答
+
+![faq-generation](docs/screenshots/faq-generation.png)
+
+### 运营看板：8 指标卡 + 30 天趋势 + 权限拦截分析
+
+![dashboard](docs/screenshots/dashboard.png)
+
+### 组织架构：用户 / 部门 / 角色管理
+
+![organization](docs/screenshots/organization.png)
