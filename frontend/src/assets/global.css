@@ -1,0 +1,80 @@
+/* ===== 简约绿色设计体系 ===== */
+:root {
+  --kb-primary: #059669;
+  --kb-primary-light: #10b981;
+  --kb-primary-dark: #047857;
+  --kb-primary-bg: #ecf7f1;
+  --kb-sidebar-bg: #0b3527;
+  --kb-sidebar-bg-2: #062a1e;
+  --kb-text: #1f2937;
+  --kb-text-secondary: #6b7280;
+  --kb-border: #e5e9e6;
+  --kb-bg: #f4f7f5;
+
+  /* Element Plus 主题覆盖（绿色） */
+  --el-color-primary: #059669;
+  --el-color-primary-light-3: #50b696;
+  --el-color-primary-light-5: #82cbb4;
+  --el-color-primary-light-7: #b4e0d2;
+  --el-color-primary-light-8: #cdeae1;
+  --el-color-primary-light-9: #e6f5f0;
+  --el-color-primary-dark-2: #047854;
+  --el-border-radius-base: 8px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--kb-bg);
+  color: var(--kb-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 滚动条 */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: #d3dcd7; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #b3c1ba; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* ===== AI 回答 Markdown 渲染 ===== */
+.chat-stream { white-space: pre-wrap; word-break: break-word; line-height: 1.8; font-size: 14px; }
+.chat-stream p { margin-bottom: 8px; }
+.chat-stream p:last-child { margin-bottom: 0; }
+.chat-stream code { background: #f0f2f1; color: #047857; padding: 2px 6px; border-radius: 4px; font-size: 0.88em; font-family: 'JetBrains Mono', Consolas, monospace; }
+.chat-stream ul, .chat-stream ol { padding-left: 20px; margin-bottom: 8px; }
+.chat-stream li { margin-bottom: 4px; }
+.chat-stream table { border-collapse: collapse; margin: 8px 0; width: 100%; }
+.chat-stream th, .chat-stream td { border: 1px solid var(--kb-border); padding: 6px 12px; font-size: 13px; text-align: left; }
+.chat-stream th { background: var(--el-color-primary-light-9); }
+.chat-stream blockquote { border-left: 3px solid var(--kb-primary); background: var(--kb-primary-bg); padding: 10px 14px; border-radius: 0 8px 8px 0; color: var(--kb-text-secondary); margin: 10px 0; }
+.chat-stream blockquote p { margin-bottom: 0; }
+.chat-stream a { color: var(--kb-primary); }
+
+/* 代码块（highlight.js） */
+.chat-stream .code-block { border: 1px solid var(--kb-border); border-radius: 8px; overflow: hidden; margin: 10px 0; background: #fbfcfb; white-space: normal; }
+.chat-stream .code-block .code-header { display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; background: #f0f4f2; border-bottom: 1px solid var(--kb-border); font-size: 12px; color: var(--kb-text-secondary); }
+.chat-stream .code-block .code-copy { cursor: pointer; border: none; background: none; color: var(--kb-text-secondary); font-size: 12px; padding: 2px 6px; border-radius: 4px; }
+.chat-stream .code-block .code-copy:hover { color: var(--kb-primary); background: var(--el-color-primary-light-9); }
+.chat-stream .code-block pre { margin: 0; padding: 12px 14px; overflow-x: auto; }
+.chat-stream .code-block code { background: none; padding: 0; color: inherit; font-size: 13px; }
+.chat-stream pre code.hljs { display: block; }
+
+/* 流式输出光标 */
+.chat-stream.streaming::after { content: '▍'; color: var(--kb-primary); animation: kb-blink .8s infinite; }
+@keyframes kb-blink { 50% { opacity: 0; } }
+
+/* AI 思考中指示器 */
+.typing-dots { display: inline-flex; gap: 5px; padding: 8px 2px; }
+.typing-dots span { width: 7px; height: 7px; border-radius: 50%; background: #9ca3af; animation: kb-typing 1.2s infinite; }
+.typing-dots span:nth-child(2) { animation-delay: .15s; }
+.typing-dots span:nth-child(3) { animation-delay: .3s; }
+@keyframes kb-typing { 0%, 60%, 100% { transform: translateY(0); opacity: .5; } 30% { transform: translateY(-5px); opacity: 1; } }
+
+/* 消息渐入 */
+.msg-enter { animation: kb-msg-in .25s ease-out; }
+@keyframes kb-msg-in { from { opacity: 0; transform: translateY(8px); } }
+
+/* 卡片 hover 浮起 */
+.kb-card-hover { transition: transform .2s, box-shadow .2s; }
+.kb-card-hover:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(5, 150, 105, .12) !important; }

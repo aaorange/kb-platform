@@ -1,0 +1,50 @@
+{"qid": "QA-001", "question": "出差的餐饮补贴标准是多少？", "expected_answer": "按 80 元/天计算，补贴天数按实际出差天数（含出发日和返回日）核定，随差旅费一并发放。", "expected_docs": ["DOC-FIN-001"], "question_type": "single_chunk"}
+{"qid": "QA-002", "question": "去北京出差的住宿费报销上限是多少？", "expected_answer": "北京属于一线城市，住宿标准为 500 元/晚。", "expected_docs": ["DOC-FIN-001"], "question_type": "single_chunk"}
+{"qid": "QA-003", "question": "高铁车程超过 6 小时可以报销什么座位？", "expected_answer": "单程超过 6 小时的车程可报销一等座。", "expected_docs": ["DOC-FIN-001"], "question_type": "single_chunk"}
+{"qid": "QA-004", "question": "出差回来后多久之内要提交报销申请？", "expected_answer": "出差结束后 15 个工作日内提交，超过 60 天未提交且无正当理由视为自动放弃。", "expected_docs": ["DOC-FIN-001"], "question_type": "single_chunk"}
+{"qid": "QA-005", "question": "供应商货款的付款周期是多久？", "expected_answer": "统一执行月结 60 天（Net 60），以对账确认的账单月份次月起算第 60 天付款。", "expected_docs": ["DOC-FIN-002"], "question_type": "single_chunk"}
+{"qid": "QA-006", "question": "小额采购多少金额以下可以走快速付款？", "expected_answer": "单笔金额 5000 元以下的小额采购可在验收合格后 7 个工作日内走快速付款通道。", "expected_docs": ["DOC-FIN-002"], "question_type": "single_chunk"}
+{"qid": "QA-007", "question": "预付款的支付比例有什么限制？", "expected_answer": "预付比例原则上不超过合同总额的 30%，且任何金额均需总经理审批。", "expected_docs": ["DOC-FIN-002"], "question_type": "single_chunk"}
+{"qid": "QA-008", "question": "工龄满 3 年的员工一年有几天年假？", "expected_answer": "满 3 年不满 10 年的，年假 10 天。", "expected_docs": ["DOC-HR-001"], "question_type": "single_chunk"}
+{"qid": "QA-009", "question": "今年的年假没休完最晚可以休到什么时候？", "expected_answer": "可顺延至次年 3 月 31 日前使用，逾期自动作废。", "expected_docs": ["DOC-HR-001"], "question_type": "single_chunk"}
+{"qid": "QA-010", "question": "年假最小可以请多少天？", "expected_answer": "年假最小请假单位为 0.5 天。", "expected_docs": ["DOC-HR-001"], "question_type": "single_chunk"}
+{"qid": "QA-011", "question": "按现行考勤制度，迟到多久会扣钱？", "expected_answer": "迟到 10 分钟以内（含）不扣款；超过 10 分钟每次扣 50 元，当月累计 3 次以上第 4 次起每次扣 100 元并抄送部门负责人。", "expected_docs": ["DOC-HR-003"], "question_type": "single_chunk"}
+{"qid": "QA-012", "question": "周末加班工资怎么算？", "expected_answer": "周末加班按 1:1 调休或 1.5 倍工资，法定节假日加班按 3 倍工资支付，调休有效期 6 个月。", "expected_docs": ["DOC-HR-003"], "question_type": "single_chunk"}
+{"qid": "QA-013", "question": "病假期间工资怎么发？", "expected_answer": "病假需二级及以上医院开具证明，病假工资按当地最低工资标准的 80% 发放。", "expected_docs": ["DOC-HR-003"], "question_type": "single_chunk"}
+{"qid": "QA-014", "question": "股权激励授予对象是什么职级？", "expected_answer": "职级 P8 及以上核心技术骨干、M4 及以上管理人员。", "expected_docs": ["DOC-HR-004"], "question_type": "single_chunk"}
+{"qid": "QA-015", "question": "电子产品保修期多久？", "expected_answer": "电子产品保修 12 个月，耳机、充电器等配件保修 6 个月。", "expected_docs": ["DOC-CS-001"], "question_type": "single_chunk"}
+{"qid": "QA-016", "question": "收到生鲜破损了怎么办？", "expected_answer": "签收后 24 小时内发现破损、变质、腐烂，凭照片凭证可申请全额退款，无需退货。", "expected_docs": ["DOC-CS-001"], "question_type": "single_chunk"}
+{"qid": "QA-017", "question": "无理由退货的期限是几天？", "expected_answer": "自签收之日起 7 天内，商品不影响二次销售可申请无理由退货。", "expected_docs": ["DOC-CS-001"], "question_type": "single_chunk"}
+{"qid": "QA-018", "question": "预售商品最长可以预售多久？", "expected_answer": "最长预售期不超过 30 天，超期未发货自动触发订单金额 10%（上限 50 元）的赔付。", "expected_docs": ["DOC-CS-002"], "question_type": "single_chunk"}
+{"qid": "QA-019", "question": "新疆那边快递大概几天能到？", "expected_answer": "新疆属于偏远地区，配送时效为 7-10 天。", "expected_docs": ["DOC-CS-002"], "question_type": "single_chunk"}
+{"qid": "QA-020", "question": "同城配送覆盖多少个城市？", "expected_answer": "当日达或次日达，覆盖 12 个重点城市核心城区。", "expected_docs": ["DOC-CS-002"], "question_type": "single_chunk"}
+{"qid": "QA-021", "question": "住宿费的完整报销标准是什么？旺季超标怎么办？", "expected_answer": "一线城市 500 元/晚、二线城市（省会及计划单列市）350 元/晚、其他城市 300 元/晚；旺季超标需出差审批单中提前申请上浮，幅度不超过标准 30%，未经申请的超标部分个人自理。", "expected_docs": ["DOC-FIN-001"], "question_type": "multi_chunk"}
+{"qid": "QA-022", "question": "出差坐飞机和坐高铁分别怎么报销？", "expected_answer": "飞机：经济舱实报实销，超 4 小时航程可申请超级经济舱，商务/头等舱需提前 3 个工作日向分管副总申请；高铁：二等座实报实销，超 6 小时可报一等座，夜间超 4 小时车程可报软卧。", "expected_docs": ["DOC-FIN-001"], "question_type": "multi_chunk"}
+{"qid": "QA-023", "question": "高管的年薪由哪几部分构成？", "expected_answer": "基本年薪（占目标年薪 50%，按月发放）+ 年度绩效奖金（40%，次年 2 月发放）+ 长期激励（10%，RSU 分三年归属）。", "expected_docs": ["DOC-HR-004"], "question_type": "multi_chunk"}
+{"qid": "QA-024", "question": "高管年度绩效奖金的计算公式是什么？", "expected_answer": "目标年薪 × 40% × 公司绩效系数（0.6-1.5）× 个人绩效系数（S 级 1.3、A 级 1.2、B 级 1.0、C 级 0.7、D 级 0.5）。", "expected_docs": ["DOC-HR-004"], "question_type": "multi_chunk"}
+{"qid": "QA-025", "question": "年假天数怎么核定？新员工怎么折算？", "expected_answer": "按累计工龄：满 1 年 5 天、满 3 年 10 天、满 10 年 15 天；过往工龄可凭社保记录合并计算。新员工按剩余日历天数折算（年假天数 × 剩余天数 / 365，不足半天按半天，不足 1 天不享受）。", "expected_docs": ["DOC-HR-001"], "question_type": "multi_chunk"}
+{"qid": "QA-026", "question": "员工离职时年假超出部分怎么处理？", "expected_answer": "离职时当年已休年假超过折算应得天数的，超出部分按日工资的 200% 从离职结算中扣回。", "expected_docs": ["DOC-HR-001"], "question_type": "multi_chunk"}
+{"qid": "QA-027", "question": "申请退货的完整流程是什么？", "expected_answer": "订单详情页发起申请 → 客服 24 小时内审核 → 审核通过寄回商品（附退货码）→ 仓库 3 个工作日验收 → 验收通过后 7 个工作日内原路退款。支付宝/微信 1-3 天到账，银行卡 3-7 天。", "expected_docs": ["DOC-CS-001"], "question_type": "multi_chunk"}
+{"qid": "QA-028", "question": "手机买来第 10 天、第 20 天、第 40 天出现质量问题分别怎么处理？", "expected_answer": "购机 15 天内（第 10 天）可退货；16-30 天（第 20 天）可换新；31 天起（第 40 天）走保修维修。", "expected_docs": ["DOC-CS-001"], "question_type": "multi_chunk"}
+{"qid": "QA-029", "question": "生鲜签收超过 24 小时才发现质量问题怎么赔偿？", "expected_answer": "由客服根据保质期和存储说明判定，最多补偿订单金额的 50%；因客户拒收、地址错误、联系方式错误导致变质的，不予退款。", "expected_docs": ["DOC-CS-001"], "question_type": "multi_chunk"}
+{"qid": "QA-030", "question": "双 11 买的订单退换货规则和平时有什么不同？", "expected_answer": "大型促销活动期间购买的订单，退换货有效期统一延长至活动结束后 15 天；赠品需随主商品一并退回，赠品缺失或损坏按市场价从退款中扣除。", "expected_docs": ["DOC-CS-001"], "question_type": "multi_chunk"}
+{"qid": "QA-031", "question": "什么时候下单能当天发货？大概几天能收到？", "expected_answer": "工作日 16:00 前支付当天发货，16:00 后次个工作日；一线及省会城市 2-3 天送达，其他城市 3-5 天。", "expected_docs": ["DOC-CS-002"], "question_type": "multi_chunk"}
+{"qid": "QA-032", "question": "物流显示已发货但一直没更新会怎么样？", "expected_answer": "72 小时内无物流更新的，系统自动向物流供应商发起查件工单，并向客户推送延误致歉优惠券（5 元无门槛）。", "expected_docs": ["DOC-CS-002"], "question_type": "multi_chunk"}
+{"qid": "QA-033", "question": "不同金额的供应商付款分别需要谁审批？", "expected_answer": "5 万元以下：部门负责人 + 财务经理；5 万-50 万元：分管副总 + 财务总监；50 万元以上：总经理 + 财务总监。", "expected_docs": ["DOC-FIN-002"], "question_type": "multi_chunk"}
+{"qid": "QA-034", "question": "供应商发票认证的期限是多久？逾期怎么办？", "expected_answer": "收到发票后 10 个工作日内完成查验和认证，逾期未认证造成的损失由经办人所在部门承担。", "expected_docs": ["DOC-FIN-002"], "question_type": "multi_chunk"}
+{"qid": "QA-035", "question": "现在的弹性工作制是怎么规定的？", "expected_answer": "推行 15 分钟弹性工作制，可在 08:45-09:15 之间到岗，相应下班时间顺延，每日保证 8 小时工作时长。", "expected_docs": ["DOC-HR-003"], "question_type": "multi_chunk"}
+{"qid": "QA-036", "question": "去杭州出差的住宿上限是多少钱一晚？", "expected_answer": "杭州属于二线城市（省会城市），标准为 350 元/晚。", "expected_docs": ["DOC-FIN-001"], "question_type": "numeric"}
+{"qid": "QA-037", "question": "单人单天的市内交通费超过多少要说明原因？", "expected_answer": "超过 150 元的部分需说明原因。", "expected_docs": ["DOC-FIN-001"], "question_type": "numeric"}
+{"qid": "QA-038", "question": "旺季住宿最多能上浮百分之多少？", "expected_answer": "单次上浮幅度不超过标准的 30%。", "expected_docs": ["DOC-FIN-001"], "question_type": "numeric"}
+{"qid": "QA-039", "question": "战略合作供应商的付款周期可以缩短到多少天？", "expected_answer": "年采购额 500 万元以上的战略供应商可申请缩短至月结 30 天。", "expected_docs": ["DOC-FIN-002"], "question_type": "numeric"}
+{"qid": "QA-040", "question": "工龄满了 10 年一年能休几天年假？", "expected_answer": "满 10 年及以上，年假 15 天。", "expected_docs": ["DOC-HR-001"], "question_type": "numeric"}
+{"qid": "QA-041", "question": "病假工资按什么比例发？", "expected_answer": "按当地最低工资标准的 80% 发放。", "expected_docs": ["DOC-HR-003"], "question_type": "numeric"}
+{"qid": "QA-042", "question": "M5 职级单次股权激励授予上限是多少股？", "expected_answer": "M5 不超过 5 万股（P8/M4 不超过 2 万股）。", "expected_docs": ["DOC-HR-004"], "question_type": "numeric"}
+{"qid": "QA-043", "question": "加班调休的有效期是多久？", "expected_answer": "调休有效期 6 个月。", "expected_docs": ["DOC-HR-003"], "question_type": "numeric"}
+{"qid": "QA-044", "question": "耳机充电器这类配件保修多久？", "expected_answer": "配件保修 6 个月。", "expected_docs": ["DOC-CS-001"], "question_type": "numeric"}
+{"qid": "QA-045", "question": "预售超期未发货的赔付是多少？", "expected_answer": "订单金额的 10%，上限 50 元。", "expected_docs": ["DOC-CS-002"], "question_type": "numeric"}
+{"qid": "QA-046", "question": "我出差想坐头等舱，需要怎么申请？", "expected_answer": "头等舱原则上不予报销，确因客户接待需要的，需提前 3 个工作日向分管副总申请。", "expected_docs": ["DOC-FIN-001"], "question_type": "conditional"}
+{"qid": "QA-047", "question": "我出差去上海，赶上酒店涨价住宿超标了怎么办？", "expected_answer": "需在出差审批单中提前申请住宿上浮（上海属一线城市标准 500 元/晚），上浮不超过 30%；未经提前申请的超标部分个人自理。", "expected_docs": ["DOC-FIN-001"], "question_type": "conditional"}
+{"qid": "QA-048", "question": "我这个月已经迟到 5 次了，会怎么处理？", "expected_answer": "按现行制度：迟到 10 分钟内不扣款，超 10 分钟每次 50 元；当月累计 3 次以上，第 4 次起每次扣款 100 元并抄送部门负责人。已累计 5 次意味着第 4、5 次按 100 元/次扣款。", "expected_docs": ["DOC-HR-003"], "question_type": "conditional"}
+{"qid": "QA-049", "question": "我买的手机第 20 天坏了可以退货吗？", "expected_answer": "购机 16-30 天内可换新不能退货；第 20 天属于换新范围。", "expected_docs": ["DOC-CS-001"], "question_type": "conditional"}
+{"qid": "QA-050", "question": "快递员送货我不在家拒收了生鲜，钱能退吗？", "expected_answer": "因客户拒收导致的问题按规则不予退款；但生鲜冷链商品当面验收发现破损可直接拒收并现场拍照，拒收订单自动全额退款——关键在于是否破损拒收而非无故拒收。", "expected_docs": ["DOC-CS-001"], "question_type": "conditional"}

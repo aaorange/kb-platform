@@ -1,0 +1,76 @@
+# v2 引擎版架构（6 容器，总计约 2.3GB 内存，适配 4G 服务器）：
+#   frontend(nginx) → backend(FastAPI+LangGraph) → redis(FAQ缓存)
+#                                           └→ milvus(混合检索) → etcd + minio(存储)
+#   minio 兼做知识图片托管（9000 对外，浏览器直读 md 中的图片 URL）
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "${PORT:-80}:80"   # 轻量服务器默认 80；AutoDL 用: bash deploy.sh 6006
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  backend:
+    build: ./backend
+    env_file: ./backend/.env.production
+    volumes:
+      - ./data:/app/data                    # kb.db + uploads + 任务工作目录
+    depends_on:
+      - redis
+      - milvus
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import urllib.request as u; u.urlopen('http://localhost:8000/api/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+
+  # ===== Milvus standalone（混合检索 dense+sparse）=====
+  etcd:
+    image: quay.io/coreos/etcd:v3.5.14
+    environment:
+      - ETCD_AUTO_COMPACTION_MODE=revision
+      - ETCD_AUTO_COMPACTION_RETENTION=1000
+      - ETCD_QUOTA_BACKEND_BYTES=4294967296
+      - ETCD_SNAPSHOT_COUNT=50000
+    volumes:
+      - ./data/etcd:/etcd
+    command: etcd -advertise-client-urls=http://etcd:2379 -listen-client-urls http://0.0.0.0:2379 --data-dir /etcd
+    restart: unless-stopped
+
+  minio:
+    image: minio/minio:RELEASE.2024-11-07T00-52-20Z
+    environment:
+      MINIO_ROOT_USER: kb_minio_admin
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?请在环境变量或根目录 .env 中设置 MINIO_ROOT_PASSWORD，并与 backend/.env.production 的 MINIO_SECRET_KEY 保持一致}
+    volumes:
+      - ./data/minio:/data
+    ports:
+      - "9000:9000"    # 知识图片公网只读（md 图片 URL 直连此端口）
+      - "9001:9001"    # 管理控制台（可选，防火墙可不放行）
+    command: minio server /data --console-address ":9001"
+    restart: unless-stopped
+
+  milvus:
+    image: milvusdb/milvus:v2.4.17
+    command: ["milvus", "run", "standalone"]
+    environment:
+      ETCD_ENDPOINTS: etcd:2379
+      MINIO_ADDRESS: minio:9000
+      MINIO_ACCESS_KEY_ID: kb_minio_admin     # 必须与 minio 服务的 MINIO_ROOT_USER 一致，否则认证失败崩溃循环
+      MINIO_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD:?请在环境变量或根目录 .env 中设置 MINIO_ROOT_PASSWORD，并与 backend/.env.production 的 MINIO_SECRET_KEY 保持一致}
+    volumes:
+      - ./data/milvus:/var/lib/milvus
+    ports:
+      - "19530:19530"
+      - "9091:9091"    # 健康检查/metrics
+    depends_on:
+      - etcd
+      - minio
+    restart: unless-stopped

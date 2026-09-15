@@ -1,0 +1,78 @@
+{
+  "documents": [
+    {
+      "doc_id": "DOC-FIN-001",
+      "file_name": "差旅报销标准.md",
+      "category": "财务制度",
+      "permissions": [
+        {"scope_type": "global"}
+      ]
+    },
+    {
+      "doc_id": "DOC-FIN-002",
+      "file_name": "供应商付款管理制度.md",
+      "category": "财务制度",
+      "permissions": [
+        {"scope_type": "role", "scope_name": "财务部"},
+        {"scope_type": "role", "scope_name": "管理层"}
+      ]
+    },
+    {
+      "doc_id": "DOC-HR-001",
+      "file_name": "年假管理制度.md",
+      "category": "人事制度",
+      "permissions": [
+        {"scope_type": "global"}
+      ]
+    },
+    {
+      "doc_id": "DOC-HR-002",
+      "file_name": "考勤管理制度_v1.md",
+      "category": "人事制度",
+      "permissions": [
+        {"scope_type": "department", "scope_name": "人力资源部"}
+      ]
+    },
+    {
+      "doc_id": "DOC-HR-003",
+      "file_name": "考勤管理制度_v2.md",
+      "category": "人事制度",
+      "permissions": [
+        {"scope_type": "department", "scope_name": "人力资源部"}
+      ]
+    },
+    {
+      "doc_id": "DOC-HR-004",
+      "file_name": "高管薪酬与股权激励细则.md",
+      "category": "薪酬制度",
+      "permissions": [
+        {"scope_type": "department", "scope_name": "人力资源部"},
+        {"scope_type": "role", "scope_name": "管理层"}
+      ]
+    },
+    {
+      "doc_id": "DOC-CS-001",
+      "file_name": "客服退换货政策.md",
+      "category": "客服知识",
+      "permissions": [
+        {"scope_type": "global"}
+      ]
+    },
+    {
+      "doc_id": "DOC-CS-002",
+      "file_name": "物流时效说明.md",
+      "category": "客服知识",
+      "permissions": [
+        {"scope_type": "global"}
+      ]
+    },
+    {
+      "doc_id": "DOC-PD-001",
+      "file_name": "产品功能说明.md",
+      "category": "产品资料",
+      "permissions": [
+        {"scope_type": "user", "scope_name": "项目负责人"}
+      ]
+    }
+  ]
+}

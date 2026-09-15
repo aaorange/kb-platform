@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# 环境配置（含密钥，绝不提交）
+.env
+.env.*
+!.env.example
+
+# 前端
+node_modules/
+frontend/dist/
+*.local
+
+# 运行时数据（数据库 / 上传文件 / Milvus & MinIO 存储）
+data/kb.db
+data/kb.db-*
+data/uploads/
+data/minio/
+data/etcd/
+data/milvus/
+data/tasks/
+data/*.log
+
+# GPU 服务日志
+gpu-services/logs/
+
+# IDE / 系统
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# 构建产物
+*.tar.gz
+*.egg

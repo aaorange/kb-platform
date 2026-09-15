@@ -1,0 +1,31 @@
+# ===== Web 框架 =====
+fastapi[standard]>=0.115.0
+uvicorn[standard]>=0.30.0
+pydantic-settings>=2.4.0
+python-multipart>=0.0.9
+
+# ===== 数据库 / 缓存 =====
+sqlalchemy[asyncio]>=2.0.0
+aiosqlite>=0.20.0
+redis>=5.0.0
+
+# ===== 认证 =====
+python-jose[cryptography]>=3.3.0
+bcrypt>=4.1.0
+
+# ===== 知识引擎（LangGraph 查询/导入图）=====
+langgraph>=0.2.0
+langchain-openai>=0.2.0
+langchain-text-splitters>=0.3.0
+
+# ===== 向量库与对象存储 =====
+pymilvus>=2.4.0
+minio>=7.2.0
+
+# ===== 文档解析（pypdf 本地降级 / docx 转 md）=====
+pypdf>=4.0.0
+python-docx>=1.1.0
+
+# ===== HTTP 客户端 =====
+httpx>=0.27.0
+requests>=2.31.0
