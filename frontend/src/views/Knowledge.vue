@@ -60,32 +60,70 @@
     </el-dialog>
 
     <!-- 上传弹窗 -->
-    <el-dialog v-model="uploadDialog" title="上传知识文档" width="640px" :close-on-click-modal="!uploading" :close-on-press-escape="!uploading">
+    <el-dialog v-model="uploadDialog" title="上传知识文档" width="720px" :close-on-click-modal="!uploading" :close-on-press-escape="!uploading">
       <el-form label-width="90px">
-        <el-form-item label="选择文件">
-          <el-upload
-            ref="uploadRef"
-            drag
-            :auto-upload="false"
-            :limit="1"
-            :on-change="onFileChange"
-            :on-remove="() => (uploadFile = null)"
-            :on-exceed="onExceed"
-            accept=".md,.txt,.docx,.pdf"
-            style="width: 100%"
-          >
-            <el-icon style="font-size: 40px; color: #c0c4cc"><UploadFilled /></el-icon>
-            <div style="margin-top: 8px">拖拽文件到此处，或点击选择</div>
-            <template #tip>
-              <div style="font-size: 12px; color: #909399">支持 .md / .txt / .docx / .pdf，单文件不超过 40MB</div>
-            </template>
-          </el-upload>
+        <!-- 模式切换：单文件 / 文件夹 -->
+        <el-form-item label="上传模式">
+          <el-radio-group v-model="uploadMode" :disabled="uploading">
+            <el-radio-button label="single">单文件</el-radio-button>
+            <el-radio-button label="folder">文件夹</el-radio-button>
+          </el-radio-group>
+          <span style="margin-left: 12px; font-size: 12px; color: #909399">文件夹模式：递归选中目录下所有合规文件，串行导入</span>
         </el-form-item>
-        <el-form-item label="知识标题">
-          <el-input v-model="uploadForm.title" placeholder="默认使用文件名" />
-        </el-form-item>
+
+        <!-- 单文件模式：保留原 el-upload（拖拽 + 单选 + 体积拦截） -->
+        <template v-if="uploadMode === 'single'">
+          <el-form-item label="选择文件">
+            <el-upload
+              ref="uploadRef"
+              drag
+              :auto-upload="false"
+              :limit="1"
+              :on-change="onFileChange"
+              :on-remove="() => (uploadFile = null)"
+              :on-exceed="onExceed"
+              accept=".md,.txt,.docx,.pdf"
+              style="width: 100%"
+            >
+              <el-icon style="font-size: 40px; color: #c0c4cc"><UploadFilled /></el-icon>
+              <div style="margin-top: 8px">拖拽文件到此处，或点击选择</div>
+              <template #tip>
+                <div style="font-size: 12px; color: #909399">支持 .md / .txt / .docx / .pdf，单文件不超过 40MB</div>
+              </template>
+            </el-upload>
+          </el-form-item>
+          <el-form-item label="知识标题">
+            <el-input v-model="uploadForm.title" placeholder="默认使用文件名" />
+          </el-form-item>
+        </template>
+
+        <!-- 文件夹模式：原生 input[webkitdirectory] 选目录 + 文件列表 -->
+        <template v-else>
+          <el-form-item label="选择文件夹">
+            <div style="width: 100%">
+              <!-- 隐藏的原生 input：webkitdirectory 递归选目录；el-upload 不支持目录，只能用原生 -->
+              <input ref="folderInputRef" type="file" webkitdirectory directory multiple style="display: none" @change="onFolderChange" />
+              <el-button :icon="FolderOpened" :disabled="uploading" @click="folderInputRef?.click()">选择文件夹</el-button>
+              <span v-if="folderFiles.length || folderSkipped" style="margin-left: 12px; font-size: 12px; color: #909399">
+                合规 {{ folderFiles.length }} 个，跳过 {{ folderSkipped }} 个（格式/体积不符）
+              </span>
+            </div>
+          </el-form-item>
+          <el-form-item v-if="folderFiles.length" label="文件列表">
+            <div style="width: 100%; max-height: 240px; overflow-y: auto; border: 1px solid #ebeef5; border-radius: 6px">
+              <div v-for="(f, i) in folderFiles" :key="i" style="display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-bottom: 1px solid #f5f5f5; font-size: 13px">
+                <span style="flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap" :title="f.webkitRelativePath || f.name">{{ f.webkitRelativePath || f.name }}</span>
+                <span style="color: #909399; width: 72px; text-align: right">{{ (f.size / 1024 / 1024).toFixed(2) }}MB</span>
+                <el-tag :type="folderStatusType(i)" size="small" style="width: 64px; text-align: center">{{ folderStatusText(i) }}</el-tag>
+                <el-button v-if="!uploading" :icon="Delete" circle size="small" @click="folderFiles.splice(i, 1)" />
+              </div>
+            </div>
+          </el-form-item>
+        </template>
+
+        <!-- 公共配置：分类 + 权限（两种模式共用；文件夹模式分类应用到全部文件） -->
         <el-form-item label="分类">
-          <el-select v-model="uploadForm.category" allow-create filterable style="width: 100%">
+          <el-select v-model="uploadForm.category" allow-create filterable style="width: 100%" :disabled="uploading">
             <el-option v-for="c in ['未分类', '财务', 'HR', '客服', '产品', '技术', '通用制度']" :key="c" :label="c" :value="c" />
           </el-select>
         </el-form-item>
@@ -106,14 +144,26 @@
           </div>
         </el-form-item>
       </el-form>
+
+      <!-- 进度区：单文件走原单进度条；文件夹模式额外显示批量汇总 -->
       <div v-if="uploading" style="margin: 0 16px 8px">
-        <el-progress :percentage="taskProgress" :stroke-width="14" :text-inside="true" />
-        <div style="font-size: 12px; color: #909399; margin-top: 6px">{{ taskStatusText }}</div>
+        <template v-if="uploadMode === 'single'">
+          <el-progress :percentage="taskProgress" :stroke-width="14" :text-inside="true" />
+          <div style="font-size: 12px; color: #909399; margin-top: 6px">{{ taskStatusText }}</div>
+        </template>
+        <template v-else>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px">
+            <span>第 {{ batchCurrent }}/{{ folderFiles.length }} 个：{{ batchCurrentFile }}</span>
+            <span style="color: #909399">成功 {{ batchSuccess }} · 重复 {{ batchDup }} · 失败 {{ batchFail }}</span>
+          </div>
+          <el-progress :percentage="taskProgress" :stroke-width="14" :text-inside="true" />
+          <div style="font-size: 12px; color: #909399; margin-top: 6px">{{ taskStatusText }}</div>
+        </template>
       </div>
       <template #footer>
         <el-button @click="uploadDialog = false" :disabled="uploading">取消</el-button>
         <el-button type="primary" :loading="uploading" @click="submitUpload">
-          {{ uploading ? '处理中…' : '开始导入' }}
+          {{ uploading ? '处理中…' : (uploadMode === 'folder' ? `开始导入（${folderFiles.length} 个）` : '开始导入') }}
         </el-button>
       </template>
     </el-dialog>
@@ -143,7 +193,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { Delete, Plus, Upload, UploadFilled } from '@element-plus/icons-vue'
+import { Delete, FolderOpened, Plus, Upload, UploadFilled } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import api from '../api'
 
@@ -164,6 +214,18 @@ const uploadPerms = ref([{ scope_type: 'global', scope_value: '' }])
 const taskProgress = ref(0)
 const taskStatusText = ref('')
 
+// ===== 文件夹批量上传相关状态 =====
+const uploadMode = ref('single')         // single | folder：弹窗内模式切换
+const folderInputRef = ref(null)         // 原生 input[webkitdirectory] 引用（el-upload 不支持目录）
+const folderFiles = ref([])              // 客户端过滤后的合规文件 File[]
+const folderSkipped = ref(0)             // 格式/体积不符被跳过的数量
+const folderStatuses = ref([])           // 每个文件状态：pending|processing|success|duplicate|failed
+const batchCurrent = ref(0)              // 当前处理到第几个（1-based）
+const batchCurrentFile = ref('')         // 当前处理的文件名（UI 显示）
+const batchSuccess = ref(0)
+const batchDup = ref(0)
+const batchFail = ref(0)
+
 const previewDialog = ref(false)
 const previewData = ref(null)
 
@@ -181,6 +243,19 @@ function openUploadDialog() {
   uploadFile.value = null
   uploadForm.value = { title: '', category: '未分类' }
   uploadPerms.value = [{ scope_type: 'global', scope_value: '' }]
+  // 重置文件夹批量状态（上次批量上传的残留清掉）
+  uploadMode.value = 'single'
+  folderFiles.value = []
+  folderSkipped.value = 0
+  folderStatuses.value = []
+  batchCurrent.value = 0
+  batchCurrentFile.value = ''
+  batchSuccess.value = 0
+  batchDup.value = 0
+  batchFail.value = 0
+  taskProgress.value = 0
+  taskStatusText.value = ''
+  if (folderInputRef.value) folderInputRef.value.value = ''  // 清空原生 input，允许重选同一目录
   uploadDialog.value = true
 }
 
@@ -209,6 +284,40 @@ function onExceed(files) {
   uploadRef.value?.handleStart(file)
 }
 
+// ===== 文件夹选择回调：读取 webkitdirectory 选中的所有文件，按格式 + 体积过滤 =====
+const SUPPORTED_FOLDER_EXTS = ['.md', '.txt', '.docx', '.pdf']  // 与单文件 accept 一致
+function onFolderChange(e) {
+  const all = Array.from(e.target.files || [])  // FileList 每项含 webkitRelativePath 相对路径
+  const ok = []
+  let skipped = 0
+  for (const f of all) {
+    const name = f.name.toLowerCase()
+    const ext = name.slice(name.lastIndexOf('.'))  // 含点，如 .md
+    if (!SUPPORTED_FOLDER_EXTS.includes(ext)) { skipped++; continue }
+    if (f.size > MAX_UPLOAD_MB * 1024 * 1024) { skipped++; continue }
+    ok.push(f)
+  }
+  folderFiles.value = ok
+  folderSkipped.value = skipped
+  folderStatuses.value = ok.map(() => 'pending')
+  batchCurrent.value = 0
+  batchCurrentFile.value = ''
+  batchSuccess.value = 0
+  batchDup.value = 0
+  batchFail.value = 0
+  if (ok.length === 0) {
+    ElMessage.warning(skipped ? `所选目录没有合规文件（跳过 ${skipped} 个）` : '所选目录为空')
+  }
+}
+
+// 文件夹模式下文件列表每行的状态标签
+function folderStatusText(i) {
+  return { pending: '待处理', processing: '处理中', success: '成功', duplicate: '已重复', failed: '失败' }[folderStatuses.value[i]] || ''
+}
+function folderStatusType(i) {
+  return { pending: 'info', processing: 'warning', success: 'success', duplicate: 'info', failed: 'danger' }[folderStatuses.value[i]] || ''
+}
+
 // 轮询后台导入任务进度，直至 completed / duplicate / failed
 async function pollTask(taskId) {
   while (true) {
@@ -223,6 +332,9 @@ async function pollTask(taskId) {
 }
 
 async function submitUpload() {
+  // 文件夹模式走批量串行提交，单文件走原逻辑
+  if (uploadMode.value === 'folder') return submitFolderUpload()
+
   if (!uploadFile.value) return ElMessage.warning('请先选择文件')
   uploading.value = true
   taskProgress.value = 0
@@ -247,6 +359,66 @@ async function submitUpload() {
     await loadData()
   } catch (e) {
     ElMessage.error(e.message || e.response?.data?.detail || '导入失败')
+  } finally {
+    uploading.value = false
+  }
+}
+
+// ===== 文件夹批量上传：串行循环调现有 /upload，复用 pollTask 轮询，聚合进度 =====
+// 后端零改动：每文件一个 task_id，后端 Semaphore(1) 自动串行处理 + SHA256 去重
+async function submitFolderUpload() {
+  if (!folderFiles.value.length) return ElMessage.warning('请先选择文件夹且至少有一个合规文件')
+  uploading.value = true
+  batchCurrent.value = 0
+  batchCurrentFile.value = ''
+  batchSuccess.value = 0
+  batchDup.value = 0
+  batchFail.value = 0
+  taskProgress.value = 0
+  taskStatusText.value = ''
+  try {
+    for (let i = 0; i < folderFiles.value.length; i++) {
+      const f = folderFiles.value[i]
+      batchCurrent.value = i + 1
+      batchCurrentFile.value = f.webkitRelativePath || f.name
+      folderStatuses.value[i] = 'processing'
+      taskProgress.value = 0
+      taskStatusText.value = `上传中：${batchCurrentFile.value}`
+      try {
+        const fd = new FormData()
+        fd.append('file', f)
+        fd.append('title', f.name.replace(/\.[^.]+$/, ''))  // 文件夹模式标题用各自文件名（去扩展名）
+        fd.append('category', uploadForm.value.category)      // 公共分类应用到全部
+        fd.append('permissions', JSON.stringify(uploadPerms.value))  // 公共权限应用到全部
+        const res = await api.uploadDocument(fd)
+        // SHA256 命中重复：后端秒回 duplicated，不算失败，继续下一个
+        if (res.data.duplicated) {
+          folderStatuses.value[i] = 'duplicate'
+          batchDup.value++
+          taskStatusText.value = `「${batchCurrentFile.value}」已存在，跳过`
+          continue
+        }
+        taskStatusText.value = `后台处理中：${batchCurrentFile.value}`
+        const task = await pollTask(res.data.task_id)
+        if (task.status === 'completed') {
+          folderStatuses.value[i] = 'success'
+          batchSuccess.value++
+        } else {
+          folderStatuses.value[i] = 'failed'
+          batchFail.value++
+        }
+      } catch (e) {
+        // 单文件失败隔离：记失败，继续下一个，不中断整批
+        folderStatuses.value[i] = 'failed'
+        batchFail.value++
+        console.error('导入失败', batchCurrentFile.value, e)
+      }
+    }
+    // 批量汇总
+    const total = folderFiles.value.length
+    ElMessage.success(`批量导入完成：成功 ${batchSuccess.value} · 重复 ${batchDup.value} · 失败 ${batchFail.value}（共 ${total}）`)
+    uploadDialog.value = false
+    await loadData()
   } finally {
     uploading.value = false
   }
